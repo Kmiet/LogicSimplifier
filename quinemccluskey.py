@@ -74,12 +74,10 @@ def nextStepMinimization(matched, var_counter):
                                 furtherMatched[newKey] = expr1;
 
     notChecked = {x : matched.get(x) for x in checked.keys() if checked[x] == False}
-    #print("NOTY ", notChecked)
     return (furtherMatched, notChecked);
 
 def combination_reduction(variables, permutations, notChecked):
     var_count = len(variables);
-    print(notChecked)
     expressions = [];
     coverByExpr = [];
     exprPermCoverCount = [];
@@ -94,7 +92,6 @@ def combination_reduction(variables, permutations, notChecked):
                 expr += str(variables[i] + " ");
             elif elem[i] == '0':
                 expr += str("!" + variables[i] + " ");
-        #print(expr)
 
         expressions.append(expr);
         if isinstance(key, tuple):
@@ -119,8 +116,6 @@ def combination_reduction(variables, permutations, notChecked):
 
     for key, val in coverByPerm.items():
         if val == []:
-            print(key, val, coverByPerm)
-            print("Brak rozwiazania??");
             return "";
         elif len(val) == 1:
             usedExpr[val[0]] = True;
@@ -136,7 +131,6 @@ def combination_reduction(variables, permutations, notChecked):
                         count += 1;
                 exprPermCoverCount[i] = count;
 
-    print([exprPermCoverCount[i] for i in range(0, expressions_len)]);
     while False in permCovered.values():
         curr_max_idx = -1;
         for i in range(0, expressions_len):
@@ -213,8 +207,6 @@ def simplify(variables, permutations):
                 canAdd = False
         if canAdd:
             notCheckedUp[key] = notChecked[key];
-
-    print(notCheckedUp)
 
     return combination_reduction(variables, permutations, notCheckedUp);
 

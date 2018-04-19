@@ -69,14 +69,25 @@ def rpn(expr):
                 if top == L_PAREN or getPriority(top) < getPriority(elem):
                     operators.append(top);
                 else:
-                    result.append(top)
-                    while len(operators) != 0 and getPriority(top) >= getPriority(elem):
-                        top = operators.pop();
+                    drawnAgain = False;
+                    if len(operators) == 0:
                         result.append(top);
+                    while len(operators) != 0 and top != L_PAREN and getPriority(top) > getPriority(elem):
+                        drawnAgain = True;
+                        result.append(top);
+                        top = operators.pop();
+                    if top == L_PAREN:
+                        operators.append(top);
+                    elif drawnAgain and getPriority(top) <= getPriority(elem):
+                        operators.append(top);
+                    elif drawnAgain:
+                        result.append(top);
+
 
             operators.append(elem);
         else:
             result.append(elem);
+
     while operators != []:
         result.append(operators.pop());
 
