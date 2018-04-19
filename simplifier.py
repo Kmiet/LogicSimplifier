@@ -31,7 +31,7 @@ def operation2arg(operation, val1, val2):
     elif operation is OR:
         return val1 or val2;
     elif operation is XOR:
-        return val1 != val2;
+        return val1 ^ val2;
     elif operation is IMPL:
         return (not val1) or val2;
     elif operation is EQ:
@@ -83,7 +83,6 @@ def rpn(expr):
                     elif drawnAgain:
                         result.append(top);
 
-
             operators.append(elem);
         else:
             result.append(elem);
@@ -107,8 +106,8 @@ def evaluate(expr, variables, permutation):
                 val = bool(stack.pop());
                 stack.append(not val);
             else:
-                val2 = bool(stack.pop());
-                val1 = bool(stack.pop());
+                val2 = bool(int(stack.pop()));
+                val1 = bool(int(stack.pop()));
                 stack.append(operation2arg(element, val1, val2));
         else:
             stack.append(element);
@@ -144,7 +143,7 @@ def parseToList(expr):
     return parsed;
 
 if __name__ == "__main__":
-    try:
+    #try:
         expr = parseToList(str(input()));
         rpnExpr = rpn(expr);
         print(rpnExpr);
@@ -154,5 +153,6 @@ if __name__ == "__main__":
         print(exprIsTruePerms);
         simplified = quinemccluskey.simplify(variables, exprIsTruePerms);
         print(simplified);
-    except:
-        print("Error - invalid expression..")
+
+    #except:
+        #print("Error - invalid expression..")

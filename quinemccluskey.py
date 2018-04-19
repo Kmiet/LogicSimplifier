@@ -23,12 +23,21 @@ def diff_key_elems(key1, key2, length):
     return True;
 
 def is_subset_key(key1, key2):
-    key1list = sorted(key1);
-    key2list = sorted(key2);
-    if len(key1list) <= len(key1list):
-        for elem1 in key1list:
-            if elem1 not in key2list:
-                return False;
+    if isinstance(key1, int) and isinstance(key2, int):
+        if key1 != key2:
+            return False;
+    elif isinstance(key2, tuple) and isinstance(key1, int):
+        key2list = sorted(key2);
+        if key1 not in key2list:
+            return False;
+
+    elif isinstance(key2, tuple) and isinstance(key1, tuple):
+        key1list = sorted(key1);
+        key2list = sorted(key2);
+        if len(key1list) <= len(key1list):
+            for elem1 in key1list:
+                if elem1 not in key2list:
+                    return False;
     return True;
 
 
@@ -165,9 +174,31 @@ def simplify(variables, permutations):
     var_count = len(variables);
     groups = [[] for i in range(0, var_count + 1)];
     if len(permutations) == 1:
-        return dict([(permutations[0], parse2bin(permutations[0], var_count))]);
+        res = str();
+        binary = parse2bin(permutations[0], var_count)
+        for i in range(0, var_count):
+            if i != 0 and len(res) > 0:
+                res += "& "
+            if binary[i] == "1":
+                res += str(variables[i] + " ");
+            elif binary[i] == '0':
+                res += str("!" + variables[i] + " ");
+        return res;
 
     [groups[count_ones(bin(perm))].append(perm) for perm in permutations];
+    for group in groups:
+        if len(group) == len(permutations):
+            res = str();
+            binary = parse2bin(permutations[0], var_count)
+            for i in range(0, var_count):
+                if i != 0 and len(res) > 0:
+                    res += "& "
+                if binary[i] == "1":
+                    res += str(variables[i] + " ");
+                elif binary[i] == '0':
+                    res += str("!" + variables[i] + " ");
+            return res;
+
     checked = dict();
     for perm in permutations:
         checked[perm] = False;
@@ -207,6 +238,8 @@ def simplify(variables, permutations):
                 canAdd = False
         if canAdd:
             notCheckedUp[key] = notChecked[key];
+
+    #print(notCheckedUp)
 
     return combination_reduction(variables, permutations, notCheckedUp);
 
